@@ -1,0 +1,42 @@
+import cv2
+import numpy as np
+
+def center_crop(image, target_size):
+    ih, iw = image.shape[:2]
+    th, tw = target_size
+    # Calculate the aspect ratios
+    img_aspect = iw / ih
+    target_aspect = tw / th
+
+    # If image is wider than target, crop sides
+    if img_aspect > target_aspect:
+        new_width = int(ih * target_aspect)
+        left = (iw - new_width) // 2
+        image_cropped = image[:, left:left+new_width]
+    # If image is taller than target, crop top/bottom
+    else:
+        new_height = int(iw / target_aspect)
+        top = (ih - new_height) // 2
+        image_cropped = image[top:top+new_height, :]
+
+    # Resize to final target size
+    image_resized = cv2.resize(image_cropped, (tw, th))
+    return image_resized
+
+cap = cv2.VideoCapture(2)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1920)
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("Failed to grab frame")
+        break
+    # Center crop to 9:16 (720x1280)
+    frame_cropped = center_crop(frame, (720, 405))  # (height, width)
+    cv2.imshow('Camera 9:16 Crop (720x1280)', frame_cropped)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
