@@ -1,4 +1,4 @@
-# Tugas Akhir: Hand Landmark Detection & Android Integration
+# Tugas Akhir: Penerjemah Bahasa Isyarat Menggunakan Mediapipe dan Deep Neural Network
 
 Tugas akhir ini terdiri dari dua bagian:
 
